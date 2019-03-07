@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.home.constantinsprenger.imagerecognition.helper;
+package de.home.constantinsprenger.imagerecognition.testapp.helper;
 
 import android.app.Activity;
 import android.view.View;

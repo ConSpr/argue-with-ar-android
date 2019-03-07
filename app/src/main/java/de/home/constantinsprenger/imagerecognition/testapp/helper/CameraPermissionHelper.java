@@ -1,4 +1,4 @@
-package de.home.constantinsprenger.imagerecognition.helper;
+package de.home.constantinsprenger.imagerecognition.testapp.helper;
 
 import android.Manifest;
 import android.app.Activity;
