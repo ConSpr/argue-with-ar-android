@@ -21,14 +21,19 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".MainActivity">
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="locked"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="AddImageActivity" />
+        <activity
+            android:name="AddImageActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <meta-data
             android:name="com.google.ar.core"
             android:value="required" />

@@ -15,8 +15,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:layout_weight="1"
-        android:contentDescription="Bild"
-        android:orientation="vertical"
+        android:contentDescription="@string/bild"
         android:rotation="90"
         app:layout_constraintBottom_toTopOf="@+id/tagField"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginBottom="60dp"
-        android:text="Label:"
+        android:text="@string/label"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -42,7 +41,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="32dp"
         android:ems="10"
-        android:hint="Enter description"
+        android:hint="@string/enter_label"
         android:importantForAutofill="no"
         android:inputType="text"
         app:layout_constraintBottom_toTopOf="@+id/sizeField"
@@ -56,8 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="36dp"
-        android:inputType="number"
-        android:text="Size in Meter"
+        android:text="@string/size_in_meter"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -69,11 +67,11 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="32dp"
         android:ems="10"
-        android:hint="Size in meters"
-        android:inputType="textPersonName"
-        android:text="0.0"
+        android:hint="@string/size_in_meters"
+        android:importantForAutofill="no"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
+        android:inputType="number"
         app:layout_constraintStart_toEndOf="@+id/textView2" />
 
     <Button
@@ -83,7 +81,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Add image"
+        android:text="@string/add_image"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -10,14 +10,14 @@ import android.graphics.ImageFormat;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.media.Image;
+import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.ar.core.ArCoreApk;
@@ -28,6 +28,7 @@ import com.google.ar.core.Frame;
 import com.google.ar.core.Session;
 import com.google.ar.core.TrackingState;
 import com.google.ar.core.exceptions.CameraNotAvailableException;
+import com.google.ar.core.exceptions.NotYetAvailableException;
 import com.google.ar.core.exceptions.UnavailableApkTooOldException;
 import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
@@ -38,15 +39,12 @@ import com.google.ar.sceneform.FrameTime;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-
 import java.io.FileOutputStream;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Objects;
-
 
 import de.home.constantinsprenger.imagerecognition.helper.CameraPermissionHelper;
 import de.home.constantinsprenger.imagerecognition.helper.FullScreenHelper;
@@ -76,9 +74,12 @@ public class MainActivity extends AppCompatActivity {
 		dbfile = new File(getApplicationContext().getFilesDir() + "/arimagedb.imgdb");
 		installRequested = false;
 		initializeSceneView();
-		Button addImageButton = findViewById(R.id.addimage);
 		this.vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		addImageButton.setOnClickListener(this::onClickButton);
+
+		ImageButton addImageButton = findViewById(R.id.addButton);
+		ImageButton recordImageButton = findViewById(R.id.recordButton);
+		addImageButton.setOnClickListener(this::onClickAddImageButton);
+		recordImageButton.setOnClickListener(this::onClickRecordImageButton);
 
 	}
 
@@ -141,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
 
 			makeMessage("Camera not available. Please restart the app.");
 			session = null;
-			return;
 		}
 	}
 
@@ -232,39 +232,27 @@ public class MainActivity extends AppCompatActivity {
 		return nv21;
 	}
 
-	private void onClickButton(View v) {
-		Intent intent = new Intent(this, AddImageActivity.class);
-		try{
-			Image currentImage = arSceneView.getArFrame().acquireCameraImage();
-			int imageFormat = currentImage.getFormat();
-			if (imageFormat == ImageFormat.YUV_420_888) {
-				Log.d("ImageFormat", "Image format is YUV_420_888");
-				byte[] jpeg = NV21toJPEG(YUV_420_888toNV21(currentImage),currentImage.getWidth(),currentImage.getHeight());
-				intent.putExtra("jpeg", jpeg);
-			}
-		}catch (Exception e){
-			e.printStackTrace();
-			Log.e(TAG,"Cant get image from camera stream.");
 
-		}
-
-		startActivityForResult(intent, 2);
-	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data){
 
 		if (requestCode == 2) {
 			if(resultCode == 2){
-				String name = (String) data.getExtras().get("name");
-				float width = (float) data.getExtras().get("size");
-				byte[] bitmap = (byte[]) data.getExtras().get("image");
-				Bitmap btm = BitmapFactory.decodeByteArray(bitmap,0,bitmap.length);
-				addImage(btm,name,width);
-				makeMessage("Image saved");
+				try {
+					String name = (String) data.getExtras().get("name");
+					float width = (float) data.getExtras().get("size");
+					byte[] bitmap = (byte[]) data.getExtras().get("image");
+					Bitmap btm = BitmapFactory.decodeByteArray(bitmap, 0, bitmap.length);
+					addImage(btm, name, width);
+					makeMessage("Image saved");
+				} catch (NullPointerException e) {
+					e.printStackTrace();
+				}
+
 			}
 			else if (resultCode == RESULT_CANCELED){
-				makeMessage("Error saving image");
+				makeMessage("No image saved");
 			}
 		} else {
 			makeMessage("Something crazy happened");
@@ -309,15 +297,9 @@ public class MainActivity extends AppCompatActivity {
 					serializeDB();
 			}
 		} catch (Exception e) {
-			//TODO: Handle Exceptions
+			e.printStackTrace();
 		}
 
-	}
-
-	public void addImage(Bitmap bitmap, String name) {
-		augmentedImageDatabase.addImage(name, bitmap);
-		serializeDB();
-		deserializeDB();
 	}
 
 	private void addImage(Bitmap bitmap, String name, float length) {
@@ -325,4 +307,32 @@ public class MainActivity extends AppCompatActivity {
 		serializeDB();
 		deserializeDB();
 	}
+
+	private void onClickAddImageButton(View v) {
+		Intent intent = new Intent(this, AddImageActivity.class);
+		intent.putExtra("Type", 1);
+		startActivityForResult(intent, 2);
+	}
+
+	private void onClickRecordImageButton(View v) {
+		Intent intent = new Intent(this, AddImageActivity.class);
+		try {
+			Image currentImage = arSceneView.getArFrame().acquireCameraImage();
+			int imageFormat = currentImage.getFormat();
+			if (imageFormat == ImageFormat.YUV_420_888) {
+				Log.d("ImageFormat", "Image format is YUV_420_888");
+				byte[] jpeg = NV21toJPEG(YUV_420_888toNV21(currentImage), currentImage.getWidth(), currentImage.getHeight());
+				intent.putExtra("jpeg", jpeg);
+				intent.putExtra("Type", 2);
+			}
+		} catch (NullPointerException | NotYetAvailableException e) {
+			e.printStackTrace();
+			Log.e(TAG, "Cant get image from camera stream.");
+			intent.putExtra("Type", 1);
+
+		}
+
+		startActivityForResult(intent, 2);
+	}
+
 }

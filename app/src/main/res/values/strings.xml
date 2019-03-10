@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">ImageRecognition</string>
+    <string name="add_existing_image">Add existing image</string>
+    <string name="create_new_image">Create new Image</string>
+    <string name="add_image">Add image</string>
+    <string name="size_in_meters">Size in meters</string>
+    <string name="size_in_meter">Size in Meter</string>
+    <string name="enter_label">Enter Label</string>
+    <string name="label">Label:</string>
+    <string name="bild">Bild</string>
 </resources>
