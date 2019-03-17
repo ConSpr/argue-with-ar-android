@@ -49,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
 	public static Toast toastMessage;
 	public static AugmentedImageDatabase augmentedImageDatabase;
 	public static long TIMESTAMP = 0;
-	//private static String dbfilename = "/testdb.imgdb";
-	private String logfilepath = "/logging.txt";
+	private String logfilepath = "/logging_Bild_Bunt_E_Hell.txt";
 
 //FIELDS
 
