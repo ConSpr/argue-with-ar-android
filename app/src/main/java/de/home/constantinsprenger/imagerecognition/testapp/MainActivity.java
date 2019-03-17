@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 		StringBuilder sb = new StringBuilder();
 		String line = null;
 		while ((line = reader.readLine()) != null) {
-			sb.append(line).append("\n");
+			sb.append(line);
 		}
 		is.close();
 		reader.close();
@@ -197,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
 		Config config = new Config(session);
 		config.setAugmentedImageDatabase(augmentedImageDatabase);
 		config.setUpdateMode(Config.UpdateMode.LATEST_CAMERA_IMAGE);
+		config.setFocusMode(Config.FocusMode.AUTO);
 		config.setPlaneFindingMode(Config.PlaneFindingMode.DISABLED);
 		session.configure(config);
 	}
@@ -267,9 +270,11 @@ public class MainActivity extends AppCompatActivity {
 	private void restart() {
 		try {
 			FileOutputStream fOut = new FileOutputStream(logfile);
+			Vibrator v = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 			myOutWriter = new OutputStreamWriter(fOut);
 			if (found) {
 				myOutWriter.append(currentLog).append((System.currentTimeMillis() - TIMESTAMP) + ",");
+				v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
 			} else {
 				myOutWriter.append(currentLog).append(",");
 			}
@@ -287,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
 			//TODO: Write duration or ERROR
 			PendingIntent mPendingIntent = PendingIntent.getActivity(this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
 			AlarmManager mgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-			mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+			mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 150, mPendingIntent);
 		}
 		System.exit(0);
 	}
