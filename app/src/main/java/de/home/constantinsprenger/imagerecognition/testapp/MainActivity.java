@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 	public static Toast toastMessage;
 	public static AugmentedImageDatabase augmentedImageDatabase;
 	public static long TIMESTAMP = 0;
-	private String logfilepath = "/logging_Bild_Bunt_E_Hell.txt";
+	private String logfilepath = "/logging.txt";
 
 //FIELDS
 
