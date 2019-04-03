@@ -2,7 +2,7 @@
 A minimal test app for live image recognition using ARCore.
 
 Also check out the [iOS version](https://github.com/hendrik/argue-with-ar-ios/) of this project.
-
+,
 ## Usage
 Use plus button to select an image from your gallery or use record button to catch the current frame you see.
 You have to label the image and define its physical size.
