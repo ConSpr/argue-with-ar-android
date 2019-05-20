@@ -325,14 +325,14 @@ public class MainActivity extends AppCompatActivity {
 				intent.putExtra("jpeg", jpeg);
 				intent.putExtra("Type", 2);
 			}
+			startActivityForResult(intent, 2);
 		} catch (NullPointerException | NotYetAvailableException e) {
 			e.printStackTrace();
 			Log.e(TAG, "Cant get image from camera stream.");
-			intent.putExtra("Type", 1);
-
+			makeMessage("Cant get image from camera stream. Please try again");
 		}
 
-		startActivityForResult(intent, 2);
+		
 	}
 
 }
